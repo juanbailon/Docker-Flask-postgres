@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+  postgres:
+    container_name: ${CONTAINER_NAME}
+    image: postgres:14.1-alpine
+    environment:
+      - PGUSER=${DB_USER}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./my_db_data:/var/lib/postgresql/data
+    networks:
+      - my-network
+  
+  flask-app:
+    container_name: flask_app_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres
+    # command: "flask db migrate && sleep 2 && flask db upgrade"
+    env_file:
+      - .env
+
+    networks:
+      - my-network
+
+
+networks:
+  my-network:

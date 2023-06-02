@@ -1,0 +1,6 @@
+images
+__pycache__
+README.md
+venv
+my_db_data
+.env
